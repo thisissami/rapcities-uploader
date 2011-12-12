@@ -95,7 +95,7 @@ genres.push(new Style("Techno","Electronic"));
   genres.push(new Style("Mambo", "Latin American"));
   genres.push(new Style("Merengue", "Latin American"));
   genres.push(new Style("Tejano", "Latin American"));
-  genres.push(new Style("Nueva Canción", "Latin American"));
+  genres.push(new Style("Nueva Cancion", "Latin American"));
   genres.push(new Style("Tango", "Latin American"));
 var moods = new Array();
 moods.push('Happy');
@@ -114,8 +114,8 @@ var pos = 0;
 var length = genres.length;
 console.log('total length: ' + length);
 
-
-gogenre();
+gartist();
+//gogenre();
 function gogenre(){
   if(pos < length){
     gscript = spawn('node', ['populate.js', 'genre',genres[pos].genre, genres[pos].style]);
@@ -154,6 +154,7 @@ function gomood(){
     }
     else{
       console.log('done with mood. onto the next thing!');
+      process.exit();
       pos = 0;
       gartist();
     }

@@ -32,7 +32,7 @@ else{
   url = require('url'),
   path = require('path'),
   fs = require('fs'),
-  songs = require('./songInterface');
+  songetter = require('./songInterface');
         
   function onRequest(req, res, next) {
     var parsed = url.parse(req.url,true);
@@ -40,7 +40,7 @@ else{
     var ext = path.extname(pathname);
     
     switch(pathname){
-      case '/getSongs': songs.getSongs(res, parsed.query); break;
+      case '/getSongs': console.log('getting songs!'); songetter.getSongs(res, parsed.query); break;
       default: return;
     }
   }
