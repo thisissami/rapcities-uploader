@@ -1,14 +1,6 @@
-var email = require('nodemailer'),
-    cluster = require('cluster'),
+var cluster = require('cluster'),
     numCPUs = require('os').cpus().length;
 
-email.SMTP = {
-  host: 'localhost',
-  port: '587',
-  use_authentication: true,
-  user: 'thisissami',
-  pass: '4rt1stn4m3'
-}
     
 if(cluster.isMaster){
   console.log(numCPUs + ' cores on this machine.');
@@ -17,7 +9,6 @@ if(cluster.isMaster){
     
   cluster.on('death', function(worker){
     console.log('worker ' + worker.pid + ' died.');
-    emailSamiWorker('Worker Died!','Worker ' + worker.pid + ' has passed away...');
     cluster.fork();
   });
   process.on("SIGTERM", process.exit);
@@ -31,8 +22,8 @@ else{
   connect = require('connect'),
   url = require('url'),
   path = require('path'),
-  fs = require('fs'),
-  songetter = require('./songInterface');
+  fs = require('fs');
+  //songetter = require('./songInterface');
         
   function onRequest(req, res, next) {
     var parsed = url.parse(req.url,true);
@@ -40,7 +31,7 @@ else{
     var ext = path.extname(pathname);
     
     switch(pathname){
-      case '/getSongs': console.log('getting songs!'); songetter.getSongs(res, parsed.query); break;
+      //case '/getSongs': console.log('getting songs!'); songetter.getSongs(res, parsed.query); break;
       default: return;
     }
   }
@@ -53,32 +44,3 @@ else{
   console.log('Server has started.');
 }
 
-function emailSamiWorker(sub, bod){
-  return function (){
-    email.send_mail({
-      sender : 'Undanceable Energy <fuuuuuck@undanceableenergy.com>',            // domain used by client to identify itself to server
-      to : 'thisissamster@gmail.com',
-      subject : sub,
-      body: bod
-      },
-      function(err, success){
-        if(err){ console.log('emailing sami about worker death!'+err); }
-        else console.log('just emailed sami!');
-    });
-  }
-}
-
-/*function websiteDown(){
-  email.send_mail({
-    sender : 'Undanceable Energy <fuuuuuck@undanceableenergy.com>',            // domain used by client to identify itself to server
-    to : 'thisissamster@gmail.com',
-    subject : "WEBSITE'S DOWN!",
-    body: "The process seems to have exited",
-    },
-    function(err, success){
-      if(err){ console.log('emailing sami issue!'+err); }
-      else console.log('just emailed sami!\n\nalso... THE SITE WENT DOWN OH NOOOOO');
-      
-     process.exit();
-  });
-}*/

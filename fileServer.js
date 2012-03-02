@@ -20,10 +20,34 @@ module.exports = function fileServer(maxage){
         folder = __dirname + '/pde/indexold.html';
         contentType = 'text/html';
       }
+	  else if(req.url == '/svg'){
+        folder = __dirname + '/pde/SVG/applet_js/index.html';
+        contentType = 'text/html';
+      }
       else if(req.url == '/vyuzik.pde'){
         folder = __dirname + '/pde/vyuzik.pde';
         contentType = 'text/processing';
+      } 
+	  else if(req.url == '/svg.pde'){
+		folder = __dirname + '/pde/SVG/applet_js/svg.pde';
+        contentType = 'text/processing';
+      }  
+	  else if(req.url == '/processing.js'){
+		folder = __dirname + '/pde/SVG/applet_js/processing.js';
+        contentType = 'text/javascript';
+      } 
+	  else if(req.url == '/NYCMapOutlines2_simple.svg'){
+		folder = __dirname + '/pde/SVG/applet_js/NYCMapOutlines2_simple.svg';
+        contentType = 'image/svg+xml';
       }
+	  else if(req.url == '/bot.svg'){
+		folder = __dirname + '/pde/SVG/applet_js/bot.svg';
+        contentType = 'image/svg+xml';
+      }	  else if(req.url == '/frame.svg'){
+		folder = __dirname + '/pde/SVG/applet_js/frame.svg';
+        contentType = 'image/svg+xml';
+      }	  
+ 
       if(folder){
         fs.readFile(folder, function(error, content){
           if(error){
