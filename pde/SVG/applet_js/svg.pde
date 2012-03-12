@@ -1,4 +1,4 @@
-/* @pjs preload="NYCMapOutlines2_simple.svg,bot.svg,frame.svg";*/
+/* @pjs preload="NYC.svg,bot.svg,frame.svg";*/
 /* this file supports P R O C E S S I N G . J S - 1.3.6 */
 /* then go to http://localhost:8888/svg */
 
@@ -19,15 +19,15 @@ float minX, maxY, maxX, minY, MINX, MAXY, MAXX, MINY;
 String[] fontList;
 
 void setup() {
-  size(958, 639);
+  size(853, 810);
   println( "setup!" );
   fontList = PFont.list();
- 
+  shapeMode(CENTER);
 
-  VPMINX = 65;
-  VPMINY = 95;
-  VPMAXX = 651;
-  VPMAXY = 570;
+  VPMINX = 0;
+  VPMINY = 0;
+  VPMAXX = 853;
+  VPMAXY = 810;
   rightDragging = leftDragging = leftClicked = rightClicked = false;
   minX = minY = MINX = MINY = 0.0;
   maxX = maxY = MAXX = MAXY = 1.0;
@@ -35,7 +35,7 @@ void setup() {
   frameRate(30);
 
   mainApp = this;
-  shapeMode(CORNER);
+  //shapeMode(CORNER);
   rectMode(CORNERS);
 
   //if ( false == scene.addNode( null, "screen", 0, 0, width, height ) ) {
@@ -46,7 +46,7 @@ void setup() {
   scene.gotoRoot();
 
   //if ( false == scene.addNode( "NYCMapOutlines2_simple.svg", "map", VPMINX, VPMINY, VPMAXX-VPMINX, VPMAXY-VPMINY )) {
-  if ( false == scene.addNode( "NYCMapOutlines2_simple.svg", "map", 0,0,2016, 1728 )) {
+  if ( false == scene.addNode( "NYC.svg", "map", 0, 0, 853, 810 )) {
     println( "Setup failed" );
     return;
   }  
@@ -81,6 +81,8 @@ if( !(rightDragging || leftDragging) )
   noLoop();
 }
 
+var artist;
+
 void perFrame() {
   if (rightDragging) {
     //scene.pan(mouseX-mouseXPrev, mouseY-mouseYPrev);
@@ -88,16 +90,25 @@ void perFrame() {
   } 
   if (leftClicked) {
     println( "left clicked" );
-
-    SceneNode clickedNode = scene.getNodeUsingScreenCoords( mouseX, mouseY );
+	var curX = mouseX;
+	var curY = mouseY;
+	
+    SceneNode clickedNode = scene.getNodeUsingScreenCoords( curX, curY );
     if( clickedNode == null ) {
       println( "clicked location not within bounds of root." );
     } else if ( clickedNode.getName() == "map" ) {
+	
+	artist = document.input.artist.value;
+	
+	var yes = confirm("Upload these coordinates for artist: " + artist + "?");
+	if(yes){println("uploading!");
       String iconName = "bot"+BOTCOUNT++;
-      if ( false == scene.addNodeUsingScreenCoords( "bot.svg", iconName, mouseX, mouseY, 50, 50 )) {
+      if ( false == scene.addNodeUsingScreenCoords( "bot.svg", iconName, curX, curY, 10, 10 )) {
         println( "add location failed" );
-      }
-    } 
+
+    }
+}
+} 
     else if ( clickedNode.getName() != "screen" ) {
       println("clickedNode:"+clickedNode.getName());
     }
@@ -233,7 +244,7 @@ void processPrivateData(SceneNode newNode, String filename ) {
     }
   }
   // for the map: BUGBUG: fix later
-  if ( filename == "NYCMapOutlines2_simple.svg" ) {
+  if ( filename == "NYC.svg" ) {
     for ( int i =0; i < childCount; ++i ) {
       String name = newNode.getChild(i).getName();
       println( i + ": " + name+" w:"+newNode.getChild(i).width+" h:"+newNode.getChild(i).height );
@@ -243,7 +254,8 @@ void processPrivateData(SceneNode newNode, String filename ) {
     }
     // d="M182.274,153.498v1439.115h1585.788V153.498H182.274z"
     println("calling setBounds");
-    newNode.setBounds( 182.274,153.498,1768.062,1592.613,true);
+    //newNode.setBounds( 182.274,153.498,600.062,600.613,true);
+newNode.setBounds( 531, 231, 1384, 1041,true);
     float[][] bounds = newNode.getBounds(true);
     bounds = newNode.getBounds(false);
   }
@@ -591,6 +603,26 @@ void setMapBoundsUsingScreenCoords( float x0, float y0, float x1, float y1 ){
     //return addNode( filename, nodeName, tmp.m02, tmp.m12, (tmp.m00+tmp.m01),(tmp.m10+tmp.m11) );
     //return addNode( filename, nodeName, tmp.m02, tmp.m12, sX, sY );
     println( "adding Node using root coords:"+r.x+" "+r.y+" " );
+		tmp = root.getNode(0);
+      PVector p2 = root.fromParentCoords( p, null );      
+      PVector vectorC = tmp.fromParentCoords( p2, null );
+$.ajax({
+	url: "http://localhost:8888/addArtist", 
+	data: {name: artist, x: vectorC.x, y: vectorC.y}, 
+	success: function(data){if(data){alert("Successfully added artist: " + data.name + "!")}}
+});
+
+/// SEND 
+
+
+/// FILES
+
+
+///FROM HERE PLZ KTHXBAI
+
+
+///JKNKTHXBAIET
+
     return addNode( filename, nodeName, r.x, r.y, s.x,s.y );
 }
 
@@ -714,7 +746,7 @@ public class SceneNode {
       rect( 0, 0, svgP.width, svgP.height );
       // END OF DEBUG
     }
-    shapeMode( CORNERS );
+    //shapeMode( CORNERS );
     //println("Drawing svg " + svgP.getName());
     svgP.drawImpl();
   }
@@ -729,7 +761,7 @@ public class SceneNode {
 //      rect( 0, 0, svgP.width, svgP.height );
       // END OF DEBUG
     }
-    shapeMode( CORNERS );
+    //shapeMode( CORNERS );
     //println("Drawing svg " + svgP.getName());
      svgP.draw();
   }

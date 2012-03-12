@@ -20,8 +20,12 @@ module.exports = function fileServer(maxage){
         folder = __dirname + '/pde/indexold.html';
         contentType = 'text/html';
       }
-	  else if(req.url == '/svg'){
-        folder = __dirname + '/pde/SVG/applet_js/index.html';
+	  else if(req.url == '/uploader'){
+        folder = __dirname + '/pde/artistupload.html';
+        contentType = 'text/html';
+      }
+	  else if(req.url == '/tester'){
+        folder = __dirname + '/pde/artisttester.html';
         contentType = 'text/html';
       }
       else if(req.url == '/vyuzik.pde'){
@@ -32,12 +36,20 @@ module.exports = function fileServer(maxage){
 		folder = __dirname + '/pde/SVG/applet_js/svg.pde';
         contentType = 'text/processing';
       }  
+	  else if(req.url == '/svgtester.pde'){
+		folder = __dirname + '/pde/SVG/applet_js/svgtester.pde';
+        contentType = 'text/processing';
+      }
 	  else if(req.url == '/processing.js'){
 		folder = __dirname + '/pde/SVG/applet_js/processing.js';
         contentType = 'text/javascript';
       } 
 	  else if(req.url == '/NYCMapOutlines2_simple.svg'){
 		folder = __dirname + '/pde/SVG/applet_js/NYCMapOutlines2_simple.svg';
+        contentType = 'image/svg+xml';
+      }
+	  else if(req.url == '/NYC.svg'){
+		folder = __dirname + '/pde/SVG/applet_js/NYCfinal.svg';
         contentType = 'image/svg+xml';
       }
 	  else if(req.url == '/bot.svg'){

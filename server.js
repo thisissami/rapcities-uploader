@@ -23,7 +23,7 @@ else{
   url = require('url'),
   path = require('path'),
   fs = require('fs');
-  //songetter = require('./songInterface');
+  uploader = require('./uploadArtist');
         
   function onRequest(req, res, next) {
     var parsed = url.parse(req.url,true);
@@ -31,7 +31,8 @@ else{
     var ext = path.extname(pathname);
     
     switch(pathname){
-      //case '/getSongs': console.log('getting songs!'); songetter.getSongs(res, parsed.query); break;
+      case '/addArtist': console.log('OH SHIT SOME SUCCESS!\n\n\n'); uploader.uploadLoc(res, parsed.query); break;
+	  case '/getArtists': console.log('GETTING ZE ARTISTS!!!!\n\n\n'); uploader.getLocs(res); break;
       default: return;
     }
   }
